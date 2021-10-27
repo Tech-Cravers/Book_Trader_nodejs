@@ -73,7 +73,7 @@ app.post('/uploads',(req,res) => {
             })();
 */
             //uploading to  drive
-            uploadFile();
+            //uploadFile();
             res.redirect('/download');
                 
             console.log(err);    
@@ -91,7 +91,7 @@ app.get('/download', (req,res) => {
 const PORT = 5000|| process.env.PORT;
 app.listen(PORT, () => console.log(`Hey Im running on port ${PORT}`));
 
-
+/*
 //drive logic starts here 
 const { google } = require('googleapis') ;
 const path = require('path')
@@ -176,3 +176,4 @@ async function linkgen(){
 //uploadFile();
 //deleteFile();
 //linkgen();
+*/
