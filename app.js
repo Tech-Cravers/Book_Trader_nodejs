@@ -2,27 +2,9 @@ console.log("Running app.js");
 
 //module imports
 var routes = require("./routes");
-//var ocr = require("./upload_ocr");
-
 
 const express = require('express');
 const app = express();
-const fs = require("fs");
-const multer = require('multer');
-const { dirname } = require('path');
-const { createWorker } = require("tesseract.js");
-const worker = createWorker({
-  logger: m => console.log(m),
-});
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        cb(null, "./uploads");
-    },
-    filename: (req,file,cb) => {
-        cb(null, file.originalname);
-    }
-});
-const upload = multer({storage: storage}).single("fileName");
 
 //app.set('views', '../views')
 app.set("view engine" , "ejs");
@@ -31,65 +13,11 @@ app.use(express.static(__dirname + '/public'));
 //ROUTES
 app.use(routes);
 
-
-app.get('/',function(req,res){
-    res.render('upload');
-});
-
-//app.use(ocr);
-app.post('/uploads',(req,res) => {
-    
-
-    upload(req,res, err => {
-        fs.readFile(`./uploads/${req.file.originalname}`,(err,data) => {
-
-            if (err) return console.log('ERROR : ',err);
-
-            //pdf to jpeg
-            
-
-            //OCR worker
- /*           
-            (async () => {
-                await worker.load();
-                await worker.loadLanguage('eng');
-                await worker.initialize('eng');
-                
-                const { data: { text } } = await worker.recognize(data)
-                .catch((err)=>{
-                    console.log(err)
-                })
-                .finally(async ()=>{
-                    await worker.terminate();
-                });
-
-                console.log(text);
-                //res.send(text);
-
-
-                
-                //await worker.terminate();
-                
-            })();
-*/
-            //uploading to  drive
-            //uploadFile();
-            res.redirect('/download');
-                
-            console.log(err);    
-        });
-    });
-});
-
-app.get('/download', (req,res) => {
-    const file = `${__dirname}/uploads/wishes.png`;
-    res.download(file);
-    res.redirect('/');
-})
-
 //starting the server
 const PORT = 5000|| process.env.PORT;
 app.listen(PORT, () => console.log(`Hey Im running on port ${PORT}`));
+
+
 
 /*
 //drive logic starts here 

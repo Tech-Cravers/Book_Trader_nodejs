@@ -1,4 +1,5 @@
 //drive logic starts here 
+
 const { google } = require('googleapis') ;
 const path = require('path')
 const fs = require('fs')
@@ -79,6 +80,8 @@ async function linkgen(){
         console.log(error.message);
     }
 }
-uploadFile();
+//uploadFile();
 //deleteFile();
 //linkgen();
+
+module.exports = {uploadFile,deleteFile,linkgen}
