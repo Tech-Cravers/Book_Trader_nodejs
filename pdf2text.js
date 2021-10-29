@@ -9,7 +9,7 @@ function pdfText(pdffile){
         // you can set this option, if you need another format except raw text
         
         // max page number to parse
-        max: 2,
+        max: 1,
         //check https://mozilla.github.io/pdf.js/getting_started/
         version: 'v1.10.100'
     }

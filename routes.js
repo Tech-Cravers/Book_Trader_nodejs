@@ -21,20 +21,9 @@ const storage = multer.diskStorage({
 });
 const upload = multer({storage: storage}).single("fileName");
 
+
 router.get('/',function(req,res){
-    res.render('index');
-});
-
-router.get('/shop',function(req,res){
-    res.render('shop-grid');
-});
-
-router.get('/upload',function(req,res){
     res.render('upload');
-});
-
-router.get('/blog',function(req,res){
-    res.render('blog');
 });
 
 //app.use(ocr);
@@ -46,7 +35,8 @@ router.post('/uploads',(req,res) => {
 
             if (err) return console.log('ERROR : ',err);
 
-            //pdf to jpeg 
+            //pdf to jpeg
+            
 
             //OCR worker 
             //ocr(data)
@@ -54,11 +44,13 @@ router.post('/uploads',(req,res) => {
             //text extractor
             pdfText(data)
 
+
             //uploading to  drive
             drive.linkgen();
 
-            res.redirect('/download')
 
+            res.redirect('/download')
+                
             console.log(err)
         });
     });
