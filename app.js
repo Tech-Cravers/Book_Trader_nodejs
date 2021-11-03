@@ -14,5 +14,5 @@ app.use(express.static(__dirname + '/public'));
 app.use(routes);
 
 //starting the server
-const PORT = 5000|| process.env.PORT;
+const PORT = process.env.PORT || 5000 ;
 app.listen(PORT, () => console.log(`Hey Im running on port ${PORT}`));
