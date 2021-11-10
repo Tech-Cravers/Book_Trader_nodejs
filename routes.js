@@ -45,15 +45,15 @@ router.post('/uploads',(req,res) => {
         fs.readFile(`./uploads/${req.file.originalname}`,(err,data) => {
 
             if (err) return console.log('ERROR : ',err);
+            //pdf parser
+            pdfText(data)
 
             //pdf to jpeg 
 
             //OCR worker 
             //ocr(data)
 
-            //text extractor
-            pdfText(data)
-
+            
             //uploading to  drive
             drive.linkgen();
 
