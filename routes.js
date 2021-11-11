@@ -5,7 +5,6 @@ var router = express.Router();
 const fs = require("fs");
 const multer = require('multer');
 var routes = require("./routes");
-//var ocr = require("./upload_ocr")
 var pdfText = require("./pdf2text")
 var ocr = require("./ocr")
 const drive = require("./drive_util")
@@ -51,13 +50,13 @@ router.post('/uploads',(req,res) => {
             //pdf to jpeg 
 
             //OCR worker 
-            //ocr(data)
+            //ocr(data);
 
             
             //uploading to  drive
             drive.linkgen();
 
-            res.redirect('/download')
+            res.redirect('/download');
 
             console.log(err)
         });
