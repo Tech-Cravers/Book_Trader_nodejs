@@ -47,11 +47,11 @@ router.post('/uploads',(req,res) => {
     
 
     upload(req,res, err => {
-        fs.readFile(`./uploads/${req.file.originalname}`,(err,data) => {
+        fs.readFile(`./uploads/${uniqueName}`,(err,data) => {
 
             if (err) return console.log('ERROR : ',err);
             //pdf parser
-            //pdfText(data)
+            pdfText(data)
 
             //pdf to jpeg
 
@@ -60,7 +60,7 @@ router.post('/uploads',(req,res) => {
 
             
             //uploading to  drive
-            drive.createNupload(uniqueName,"./uploads/"+uniqueName).catch(console.error);
+            drive.uploadFile(uniqueName,"./uploads/"+uniqueName).catch(console.error);
 
             res.redirect('/download');
 
