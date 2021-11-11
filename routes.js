@@ -4,18 +4,20 @@ var router = express.Router();
 
 const fs = require("fs");
 const multer = require('multer');
+const path = require('path');
 var routes = require("./routes");
 var pdfText = require("./pdf2text")
 var ocr = require("./ocr")
 const drive = require("./drive_util")
-
+var uniqueName;
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, "./uploads");
     },
-    filename: (req,file,cb) => {
-        cb(null, file.originalname);
+    filename: (req, file, cb) => {
+        uniqueName = `${Date.now()}-${Math.round(Math.random() * 1E9)}${path.extname(file.originalname)}`;
+              cb(null, uniqueName)
     }
 });
 const upload = multer({storage: storage}).single("fileName");
@@ -36,6 +38,10 @@ router.get('/blog',function(req,res){
     res.render('blog');
 });
 
+router.get('/contact',function(req,res){
+    res.render('contact');
+});
+
 //app.use(ocr);
 router.post('/uploads',(req,res) => {
     
@@ -45,16 +51,16 @@ router.post('/uploads',(req,res) => {
 
             if (err) return console.log('ERROR : ',err);
             //pdf parser
-            pdfText(data)
+            //pdfText(data)
 
-            //pdf to jpeg 
+            //pdf to jpeg
 
             //OCR worker 
             //ocr(data);
 
             
             //uploading to  drive
-            drive.linkgen();
+            drive.createNupload(uniqueName,"./uploads/"+uniqueName).catch(console.error);
 
             res.redirect('/download');
 

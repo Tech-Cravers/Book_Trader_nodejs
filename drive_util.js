@@ -1,32 +1,60 @@
 //drive logic starts here 
 
 const { google } = require('googleapis') ;
-const path = require('path')
-const fs = require('fs')
+const readLine = require('readline');
+const path = require('path');
+const fs = require('fs');
 const dotenv = require('dotenv');
+const { file } = require('googleapis/build/src/apis/file');
 dotenv.config();
 
-const oauth2Client = new google.auth.OAuth2(
-    process.env.CLIENT_ID,
-    process.env.CLIENT_SECRET,
-    process.env.REDIRECT_URI
-);
+const KEY_FILE_PATH = path.join(__dirname, '/book-trader-0-22a19b16b67f.json');
 
-oauth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN})
+const SCOPES = ['htttps://www.googleapis.com/auth/drive'];
+
+const auth = new google.auth.GoogleAuth( {
+    keyFile: KEY_FILE_PATH,
+    scopes: SCOPES
+});
 
 const drive = google.drive({
     version: 'v3',
-    auth: oauth2Client
-})
+    auth: auth
+});
 
-const filePath  = path.join (__dirname, '/uploads/GitNotesForProfessionals.pdf')
+const filePath  = path.join(__dirname, '/uploads/ready.pdf');
 
+async function createNupload(fileName='ready.pdf',file_DIR=filePath){
+    let fileMetaData = {
+        'name': fileName,
+        'parents':['1VIRGEYLR_LPVKDULGlR0fICxFWVdMdbO']
+
+    }
+
+    let media = {
+        mimeType:'application/pdf',
+        body: fs.createReadStream(file_DIR)
+    }
+    let response = await drive.files.create({
+        resource : fileMetaData,
+        media: media,
+        fields:'id'
+    });
+
+    switch(response.status){
+        case 200:
+            console.log('File ID'+response.id)
+            break;
+        default:
+            console.log(response.errors)
+            break;
+    }
+}
 async function uploadFile(){
     try{
         const response = await drive.files.create({
             requestBody: {
-                name: 'testPDF.pdf',
-                //filePath: '/MyDrive',
+                name: 'ready.pdf',
                 mimeType:'application/pdf'
             },
             media: {
@@ -84,4 +112,4 @@ async function linkgen(){
 //deleteFile();
 //linkgen();
 
-module.exports = {uploadFile,deleteFile,linkgen}
+module.exports = {uploadFile,deleteFile,linkgen,createNupload}
