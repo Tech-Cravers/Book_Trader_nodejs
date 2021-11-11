@@ -1,53 +1,59 @@
 //drive logic starts here 
 
 const { google } = require('googleapis') ;
-const path = require('path')
-const fs = require('fs')
+const readLine = require('readline');
+const path = require('path');
+const fs = require('fs');
 const dotenv = require('dotenv');
+const { file } = require('googleapis/build/src/apis/file');
 dotenv.config();
 
-const oauth2Client = new google.auth.OAuth2(
-    process.env.CLIENT_ID,
-    process.env.CLIENT_SECRET,
-    process.env.REDIRECT_URI
-);
+const KEYFILEPATH = path.join(__dirname, '/book-trader-0-22a19b16b67f.json');
 
-oauth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN})
+const SCOPES = ['https://www.googleapis.com/auth/drive', 'profile'];
 
-const drive = google.drive({
-    version: 'v3',
-    auth: oauth2Client
-})
+const auth = new google.auth.GoogleAuth({
+    keyFile: KEYFILEPATH,
+    scopes: SCOPES
+  });
 
-const filePath  = path.join (__dirname, '/uploads/GitNotesForProfessionals.pdf')
+const drive = google.drive({version: 'v3', auth});
 
-async function uploadFile(){
-    try{
-        const response = await drive.files.create({
-            requestBody: {
-                name: 'testPDF.pdf',
-                //filePath: '/MyDrive',
-                mimeType:'application/pdf'
-            },
-            media: {
-                mimeType:'application/pdf',
-                body: fs.createReadStream(filePath)
-            }
-        })
+const filePath  = path.join(__dirname, '/uploads/1636614059951-930248484.pdf');
 
-        console.log(response.data);
-    }
+async function uploadFile(fileName='ready.pdf',file_DIR=filePath){
     
-    catch(error){
-        console.log(error)
+    let fileMetaData = {
+        'name': fileName,
+        'parents': [  '1VIRGEYLR_LPVKDULGlR0fICxFWVdMdbO'  ]
     }
-    
+
+    let media = {
+        mimeType:'application/pdf',
+        body: fs.createReadStream(file_DIR)
+    }
+    let response = await drive.files.create({
+        resource : fileMetaData,
+        media: media,
+        fields:'id'
+    });
+
+    switch(response.status){
+        case 200:
+            let file = response.result;
+            console.log('*********************************************************************');
+            console.log('Created File ID: '+response.data.id);
+            break;
+        default:
+            console.log(response.errors)
+            break;
+    }
 }
 
-async function deleteFile(){
+async function deleteFile(fileID){
     try{
         const response = await drive.files.delete({
-            fileId: '1qzdhI_nHldLiZJG4Kp1CI_SJaCQecSHL'
+            fileId:fileID
         })
         console.log(response.data,response.status);
     }
@@ -56,11 +62,11 @@ async function deleteFile(){
     }
 }
 
-async function linkgen(){
+async function linkgen(fileID = '1s0dn0XEmbNKVhCZ2L_KoXYkd1xrGLul0'){
 
     try{
 
-        const fileID = '1RG0mzACaICFMAmRZvHsS_8xWnXBzQIhD';
+        
         await drive.permissions.create({
             fileId: fileID,
             requestBody: {
@@ -82,6 +88,7 @@ async function linkgen(){
 }
 //uploadFile();
 //deleteFile();
-//linkgen();
+//linkgen('1wVs98oLTPU_x4ATQkJnL0GenFsYqP4Qh');
+//createNupload('GitNotesForProfessionals.pdf','D:\\Project\\major project\\Book_Trader_nodejs\\GitNotesForProfessionals.pdf').catch(console.error);
 
 module.exports = {uploadFile,deleteFile,linkgen}
