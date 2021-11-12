@@ -29,6 +29,9 @@ router.get('/',function(req,res){
 router.get('/shop',function(req,res){
     res.render('shop-grid');
 });
+router.get('/index',function(req,res){
+    res.render('index');
+});
 
 router.get('/upload',function(req,res){
     res.render('upload');
@@ -53,10 +56,9 @@ router.post('/uploads',(req,res) => {
             //pdf parser
             pdfText(data)
 
-            //pdf to jpeg
 
             //OCR worker 
-            //ocr(data);
+            ocr(data);
 
             
             //uploading to  drive
