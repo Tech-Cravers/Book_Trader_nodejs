@@ -58,7 +58,7 @@ router.post('/uploads',(req,res) => {
 
 
             //OCR worker 
-            ocr(data);
+            //ocr(data);
 
             
             //uploading to  drive
