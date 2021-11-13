@@ -1,2 +1,4 @@
 # nodejs_server
  node fserver for book trader
+
+An online Book trader's library software project that acts as a central database containing various books in stocks along with their title, author and cost. This project is a website that acts as a central books store. Where users can get access to books by purchasing or by uploading other books in return. This project is developed using php as the front-end and sql as back-end. The Google drive database stores various book- related details. A user visiting the website can see a wide range of books arranged in respective categories. The user can get access to books with tokens and they can add books or pdf. By adding books, the user will get some amount of tokens which he can use to get access to other books. The user may even search for specific books on the website.
