@@ -45,6 +45,10 @@ router.get('/contact',function(req,res){
     res.render('contact');
 });
 
+router.get('/login',function(req,res){
+    res.render('login');
+});
+
 //app.use(ocr);
 router.post('/uploads',(req,res) => {
     
